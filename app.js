@@ -7,8 +7,15 @@ var bodyParser = require('body-parser');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
+var generate_key = require('./routes/generate_key');
 
 var app = express();
+
+global.password = '12345678901234567890123456789012';
+var crypto = require('crypto');
+var decipher = crypto.createDecipher('aes192',global.password);
+decipher.update('ed36e4775f264f8563abffc5302586f4','hex','utf8');
+var dec = decidher.final('utf8');
 
 var basicAuth = require('basic-auth-connect');
 app.use(basicAuth('hoge','hogepass'));
@@ -27,6 +34,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
 app.use('/users', users);
+app.use('/generate_key',generate_key);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
